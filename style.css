@@ -1,8 +1,94 @@
+body {
+    background-color: rgb(68, 115, 201);
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    padding: 48px 48px 28px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
 .title {
+    color: white;
+    font-family: 'Pacifico', cursive;
+    font-size: 72px;
+    padding: 0px 0px 16px;
+    margin: 0;
+}
+
+.Filter__container {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.Filter__Grid {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.Filter__countries {
+    padding: 0px 0px 0px 20px;
+}
+
+.Filter__DateFrom {
+    padding: 0px 0px 0px 24px;
+}
+
+.Filter__DateTo {
+    padding: 0px 0px 0px 24px;
+}
+
+.Filter__Prices {
+    padding: 0px 0px 0px 20px
+}
+
+.Filter__Sizes {
+    padding: 0px 0px 0px 20px
+}
+
+.Filter__Clear {
+    align-self: center;
+    border: 2px solid white;
+    border-radius: 0.5rem;
+    color: white;
+    background-color: #333;
+    font-weight: bold;
+    font-size: 1.125rem;
+    height: 2.4rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+.FoundMessage__Container {
+    padding: 16px 0px 0px;
+}
+
+.FoundMessage__Title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 40px;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.FoundMessage__Content {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    padding: 9.6px 0px 8px 3.2px;
+    margin: 0;
     color: white;
 }
 
-
+.Main {
+    padding: 0px 24px;
+    background-color: white;
+}
 @media screen and (min-width: 1024px) and (max-width: 1440px) {
     
 }

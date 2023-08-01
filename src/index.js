@@ -21,6 +21,7 @@ const option2Size = document.createElement("option");
 const option3Size = document.createElement("option");
 const option4Size = document.createElement("option");
 const option5Price = document.createElement("option");
+const iconCountry = document.createElement("img")
 const inputCheckin = document.createElement("input");
 const inputCheckout = document.createElement("input");
 const selectPrice = document.createElement("select");
@@ -32,6 +33,7 @@ const sectionDivGeneral = document.createElement("section");
 const sectionMain = document.createElement("section");
 const articleSectionMain = document.createElement("article");
 const body = document.querySelector("body");
+const buttonConsulta = document.createElement("button")
 
 
 body.appendChild(divGeneral)
@@ -54,11 +56,15 @@ div1Header.className = "Filter__container"
 div1Header.appendChild(divDiv1Header)
 divDiv1Header.className = "Filter__Grid"
 
+// divDiv1Header.appendChild(iconCountry)
+// iconCountry.setAttribute("src", "/assets/1.png")
 
 divDiv1Header.appendChild(selectCountry)
 selectCountry.setAttribute("class", "Filter__countries Filter-Icon")
 selectCountry.setAttribute("id", "filter-countries")
 selectCountry.setAttribute("name", "filter-countries")
+// selectCountry.appendChild(iconCountry)
+// iconCountry.src = "/assets/1.png"
 
 selectCountry.appendChild(option1Country)
 option1Country.setAttribute("value", "all")
@@ -81,7 +87,7 @@ option5Country.setAttribute("value", "country4")
 option5Country.innerText = "Uruguay"
 
 divDiv1Header.appendChild(inputCheckin)
-inputCheckin.className = "Filter__DateFrom Fikter-Icon"
+inputCheckin.className = "Filter__DateFrom Filter-Icon"
 inputCheckin.setAttribute("name", "date-from")
 inputCheckin.setAttribute("id", "date-from")
 inputCheckin.setAttribute("min", "")
@@ -178,14 +184,217 @@ main.appendChild(sectionMain)
 sectionMain.setAttribute("class", "HotelsContainer")
 
 sectionMain.appendChild(articleSectionMain)
+articleSectionMain.setAttribute("class", "hotelCard")
+
+// sectionMain.appendChild(buttonConsulta)
+// buttonConsulta.setAttribute("class", "button-consulta")
+// buttonConsulta.innerText = "Consulta"
+
+
 
 const hotelesCard = async () => {
     const response = await fetch ("https://6256097e8646add390e01d99.mockapi.io/hotels/reservation/hotels");
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data
 }
 
-// articleSectionMain.appendChild(hotelesCard(data.name))
+function showCard(data) {
+    console.log(data)
+    data.forEach((hotel) => {
+        const cardHotel = document.createElement("article")
+        sectionMain.appendChild(cardHotel)
+        cardHotel.setAttribute("class", "card")
 
-hotelesCard()
+        const imagenHotel = document.createElement("img")
+        cardHotel.appendChild(imagenHotel)
+        imagenHotel.setAttribute("src", hotel.photo)
+        imagenHotel.setAttribute("alt", hotel.name)
+        imagenHotel.setAttribute("class", "hotel-image")
+        
+        const nombreHotel = document.createElement("h2")
+        cardHotel.appendChild(nombreHotel)
+        nombreHotel.innerText = hotel.name
+        nombreHotel.setAttribute("class", "hotel-name")
+
+        const cardInfo = document.createElement("section")
+        cardHotel.appendChild(cardInfo)
+        cardInfo.setAttribute("class", "card-info")
+
+        const divCountry = document.createElement("div")
+        cardInfo.appendChild(divCountry)
+        divCountry.setAttribute("class", "div-card-country")
+
+        const imgCountry = document.createElement("img")
+        divCountry.appendChild(imgCountry)
+        function logoCountry (country) {
+            switch (country) {
+                case "Argentina":
+                    return './assets/argentina.png';
+                case "Brasil":
+                    return './assets/brasil.png';
+                case "Chile":
+                    return './assets/chile.png';
+                case "Uruguay":
+                    return './assets/uruguay.png';
+                default:
+                    return 'Pais no valido';
+                }
+        }
+        imgCountry.src = logoCountry(hotel.country)
+        iconCountry.setAttribute("class", "img-country")
+
+        const countryCard = document.createElement("p")
+        divCountry.appendChild(countryCard)
+        countryCard.setAttribute("class", "country-name")
+        countryCard.innerHTML = hotel.country
+
+
+
+        const divHotel = document.createElement("div")
+        cardInfo.appendChild(divHotel)
+        divHotel.setAttribute("class", "div-card-room")
+
+        
+        const sizeHotel = document.createElement("p")
+        divHotel.appendChild(sizeHotel)
+        sizeHotel.setAttribute("class", "hotel-size")
+        sizeHotel.innerHTML = hotel.rooms +" rooms -"
+
+        const priceHotel = document.createElement("p")
+        divHotel.appendChild(priceHotel)
+        priceHotel.setAttribute("class", "hotel-price")
+        function cambioValor (price) {
+            switch (price) {
+                case 1:
+                    return '$';
+                case 2:
+                    return '$$';
+                case 3:
+                    return '$$$';
+                case 4:
+                    return '$$$$';
+                default:
+                    return 'Número no válido';
+                }
+        }
+        priceHotel.innerHTML = cambioValor(hotel.price)
+
+        const buttonCard = document.createElement("button")
+        cardInfo.appendChild(buttonCard)
+        buttonCard.setAttribute("class", "button-card")
+        buttonCard.innerText = "Book it!"
+
+        pSection.style.display = "none"
+
+    });
+}
+
+const hoteles = await hotelesCard()
+
+showCard(hoteles)
+
+
+// articleSectionMain.appendChild(hotelesCard())
+
+// hotelesCard()
+
+import { hotelesCards } from "./api.js";
+
+// buttonConsulta.addEventListener("click" , async () => {
+//     const response = await hotelesCards()
+//     const data = await response.json()
+//     sectionMain.innerHTML = ""
+
+
+
+    
+    // data.forEach((hotel) => {
+    //     const cardHotel = document.createElement("article")
+    //     sectionMain.appendChild(cardHotel)
+    //     cardHotel.setAttribute("class", "card")
+
+    //     const imagenHotel = document.createElement("img")
+    //     cardHotel.appendChild(imagenHotel)
+    //     imagenHotel.setAttribute("src", hotel.photo)
+    //     imagenHotel.setAttribute("alt", hotel.name)
+    //     imagenHotel.setAttribute("class", "hotel-image")
+        
+    //     const nombreHotel = document.createElement("h2")
+    //     cardHotel.appendChild(nombreHotel)
+    //     nombreHotel.innerText = hotel.name
+    //     nombreHotel.setAttribute("class", "hotel-name")
+
+    //     const cardInfo = document.createElement("section")
+    //     cardHotel.appendChild(cardInfo)
+    //     cardInfo.setAttribute("class", "card-info")
+
+    //     const divCountry = document.createElement("div")
+    //     cardInfo.appendChild(divCountry)
+    //     divCountry.setAttribute("class", "div-card-country")
+
+    //     const imgCountry = document.createElement("img")
+    //     divCountry.appendChild(imgCountry)
+    //     function logoCountry (country) {
+    //         switch (country) {
+    //             case "Argentina":
+    //                 return './assets/argentina.png';
+    //             case "Brasil":
+    //                 return './assets/brasil.png';
+    //             case "Chile":
+    //                 return './assets/chile.png';
+    //             case "Uruguay":
+    //                 return './assets/uruguay.png';
+    //             default:
+    //                 return 'Pais no valido';
+    //             }
+    //     }
+    //     imgCountry.src = logoCountry(hotel.country)
+    //     iconCountry.setAttribute("class", "img-country")
+
+    //     const countryCard = document.createElement("p")
+    //     divCountry.appendChild(countryCard)
+    //     countryCard.setAttribute("class", "country-name")
+    //     countryCard.innerHTML = hotel.country
+
+
+
+    //     const divHotel = document.createElement("div")
+    //     cardInfo.appendChild(divHotel)
+    //     divHotel.setAttribute("class", "div-card-room")
+
+        
+    //     const sizeHotel = document.createElement("p")
+    //     divHotel.appendChild(sizeHotel)
+    //     sizeHotel.setAttribute("class", "hotel-size")
+    //     sizeHotel.innerHTML = hotel.rooms +" rooms -"
+
+    //     const priceHotel = document.createElement("p")
+    //     divHotel.appendChild(priceHotel)
+    //     priceHotel.setAttribute("class", "hotel-price")
+    //     function cambioValor (price) {
+    //         switch (price) {
+    //             case 1:
+    //                 return '$';
+    //             case 2:
+    //                 return '$$';
+    //             case 3:
+    //                 return '$$$';
+    //             case 4:
+    //                 return '$$$$';
+    //             default:
+    //                 return 'Número no válido';
+    //             }
+    //     }
+    //     priceHotel.innerHTML = cambioValor(hotel.price)
+
+    //     const buttonCard = document.createElement("button")
+    //     cardInfo.appendChild(buttonCard)
+    //     buttonCard.setAttribute("class", "button-card")
+    //     buttonCard.innerText = "Book it!"
+
+    // });
+
+
+
+

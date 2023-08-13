@@ -1,3 +1,8 @@
+import { hotelesCards } from "./api.js";
+import { cambioValor,changeSize,logoCountry} from "./helpers.js";
+
+const hoteles = await hotelesCards()
+
 const divGeneral = document.createElement("div");
 const header = document.createElement("header");
 const main = document.createElement("main");
@@ -27,13 +32,17 @@ const inputCheckout = document.createElement("input");
 const selectPrice = document.createElement("select");
 const selectSize = document.createElement("select");
 const buttonClear = document.createElement("button");
+const iconSelectCountry = document.createElement("img")
+const iconSelectPrice = document.createElement("img")
+const iconSelectSize = document.createElement("img")
+const iconSelectDateIn = document.createElement("img")
+const iconSelectDateOut = document.createElement("img")
 const p1Div2Header = document.createElement("p");
 const p2Div2Header = document.createElement("p");
 const sectionDivGeneral = document.createElement("section");
 const sectionMain = document.createElement("section");
-const articleSectionMain = document.createElement("article");
 const body = document.querySelector("body");
-const buttonConsulta = document.createElement("button")
+const message = document.createElement("p")
 
 
 body.appendChild(divGeneral)
@@ -56,35 +65,39 @@ div1Header.className = "Filter__container"
 div1Header.appendChild(divDiv1Header)
 divDiv1Header.className = "Filter__Grid"
 
-// divDiv1Header.appendChild(iconCountry)
-// iconCountry.setAttribute("src", "/assets/1.png")
+divDiv1Header.appendChild(iconSelectCountry)
+iconSelectCountry.setAttribute("class", "icon-select-country")
+iconSelectCountry.src = "/assets/1.png"
 
 divDiv1Header.appendChild(selectCountry)
 selectCountry.setAttribute("class", "Filter__countries Filter-Icon")
 selectCountry.setAttribute("id", "filter-countries")
 selectCountry.setAttribute("name", "filter-countries")
-// selectCountry.appendChild(iconCountry)
-// iconCountry.src = "/assets/1.png"
+
 
 selectCountry.appendChild(option1Country)
 option1Country.setAttribute("value", "all")
 option1Country.innerText = "All countries"
 
 selectCountry.appendChild(option2Country)
-option2Country.setAttribute("value", "country1")
+option2Country.setAttribute("value", "Argentina")
 option2Country.innerText = "Argentina"
 
 selectCountry.appendChild(option3Country)
-option3Country.setAttribute("value", "country2")
+option3Country.setAttribute("value", "Brasil")
 option3Country.innerText = "Brasil"
 
 selectCountry.appendChild(option4Country)
-option4Country.setAttribute("value", "country3")
+option4Country.setAttribute("value", "Chile")
 option4Country.innerText = "Chile"
 
 selectCountry.appendChild(option5Country)
-option5Country.setAttribute("value", "country4")
+option5Country.setAttribute("value", "Uruguay")
 option5Country.innerText = "Uruguay"
+
+divDiv1Header.appendChild(iconSelectDateIn)
+iconSelectDateIn.setAttribute("class", "icon-select-datein")
+iconSelectDateIn.src = "/assets/3.png"
 
 divDiv1Header.appendChild(inputCheckin)
 inputCheckin.className = "Filter__DateFrom Filter-Icon"
@@ -95,6 +108,9 @@ inputCheckin.setAttribute("max", "")
 inputCheckin.setAttribute("type", "date")
 inputCheckin.setAttribute("value", "")
 
+divDiv1Header.appendChild(iconSelectDateOut)
+iconSelectDateOut.setAttribute("class", "icon-select-dateout")
+iconSelectDateOut.src = "/assets/4.png"
 
 divDiv1Header.appendChild(inputCheckout)
 inputCheckout.setAttribute("class", "Filter__DateTo Filter-Icon")
@@ -104,6 +120,9 @@ inputCheckout.setAttribute("type", "date")
 inputCheckout.setAttribute("min", "")
 inputCheckout.setAttribute("value", "")
 
+divDiv1Header.appendChild(iconSelectPrice)
+iconSelectPrice.setAttribute("class", "icon-select-price")
+iconSelectPrice.src = "/assets/5.png"
 
 divDiv1Header.appendChild(selectPrice)
 selectPrice.setAttribute("class", "Filter__Prices Filter-Icon")
@@ -115,21 +134,24 @@ option1Price.setAttribute("value", "all")
 option1Price.innerText = "All prices"
 
 selectPrice.appendChild(option2Price)
-option2Price.setAttribute("value", "price1")
+option2Price.setAttribute("value", "1")
 option2Price.innerText = "$"
 
 selectPrice.appendChild(option3Price)
-option3Price.setAttribute("value", "price2")
+option3Price.setAttribute("value", "2")
 option3Price.innerText = "$$"
 
 selectPrice.appendChild(option4Price)
-option4Price.setAttribute("value", "price3")
+option4Price.setAttribute("value", "3")
 option4Price.innerText = "$$$"
 
 selectPrice.appendChild(option5Price)
-option5Price.setAttribute("value", "price4")
+option5Price.setAttribute("value", "4")
 option5Price.innerText = "$$$$"
 
+divDiv1Header.appendChild(iconSelectSize)
+iconSelectSize.setAttribute("class", "icon-select-size")
+iconSelectSize.src = "/assets/2.png"
 
 divDiv1Header.appendChild(selectSize)
 selectSize.setAttribute("class", "Filter__Sizes Filter-Icon")
@@ -137,19 +159,19 @@ selectSize.setAttribute("name", "filter-sizes")
 selectSize.setAttribute("id", "filter-sizes")
 
 selectSize.appendChild(option1Size)
-option1Size.setAttribute("value", "size1")
-option1Size.innerText = "All sizes"
+option1Size.setAttribute("value", "all")
+option1Size.innerText = " All sizes "
 
 selectSize.appendChild(option2Size)
-option2Size.setAttribute("value", "size2")
+option2Size.setAttribute("value", "Small")
 option2Size.innerText = "Small"
 
 selectSize.appendChild(option3Size)
-option3Size.setAttribute("value", "size3")
+option3Size.setAttribute("value", "Medium")
 option3Size.innerText = "Medium"
 
 selectSize.appendChild(option4Size)
-option4Size.setAttribute("value", "size4")
+option4Size.setAttribute("value", "Large")
 option4Size.innerText = "Large"
 
 divDiv1Header.appendChild(buttonClear)
@@ -183,24 +205,19 @@ main.setAttribute("class", "Main")
 main.appendChild(sectionMain)
 sectionMain.setAttribute("class", "HotelsContainer")
 
-sectionMain.appendChild(articleSectionMain)
-articleSectionMain.setAttribute("class", "hotelCard")
+sectionDivGeneral.appendChild(message)
+message.setAttribute("class", "noResults")
+message.innerText = "No se encontraron resultados"
 
-// sectionMain.appendChild(buttonConsulta)
-// buttonConsulta.setAttribute("class", "button-consulta")
-// buttonConsulta.innerText = "Consulta"
+// const checkInInput = document.getElementById("date-from")
 
+// const today = new Date()
 
-
-const hotelesCard = async () => {
-    const response = await fetch ("https://6256097e8646add390e01d99.mockapi.io/hotels/reservation/hotels");
-    const data = await response.json();
-    // console.log(data);
-    return data
-}
 
 function showCard(data) {
-    console.log(data)
+
+    sectionMain.innerHTML = ""
+
     data.forEach((hotel) => {
         const cardHotel = document.createElement("article")
         sectionMain.appendChild(cardHotel)
@@ -227,20 +244,6 @@ function showCard(data) {
 
         const imgCountry = document.createElement("img")
         divCountry.appendChild(imgCountry)
-        function logoCountry (country) {
-            switch (country) {
-                case "Argentina":
-                    return './assets/argentina.png';
-                case "Brasil":
-                    return './assets/brasil.png';
-                case "Chile":
-                    return './assets/chile.png';
-                case "Uruguay":
-                    return './assets/uruguay.png';
-                default:
-                    return 'Pais no valido';
-                }
-        }
         imgCountry.src = logoCountry(hotel.country)
         iconCountry.setAttribute("class", "img-country")
 
@@ -255,29 +258,17 @@ function showCard(data) {
         cardInfo.appendChild(divHotel)
         divHotel.setAttribute("class", "div-card-room")
 
-        
+
         const sizeHotel = document.createElement("p")
         divHotel.appendChild(sizeHotel)
         sizeHotel.setAttribute("class", "hotel-size")
-        sizeHotel.innerHTML = hotel.rooms +" rooms -"
+        sizeHotel.innerHTML = `${hotel.rooms} rooms - `
+    
 
         const priceHotel = document.createElement("p")
         divHotel.appendChild(priceHotel)
         priceHotel.setAttribute("class", "hotel-price")
-        function cambioValor (price) {
-            switch (price) {
-                case 1:
-                    return '$';
-                case 2:
-                    return '$$';
-                case 3:
-                    return '$$$';
-                case 4:
-                    return '$$$$';
-                default:
-                    return 'Número no válido';
-                }
-        }
+
         priceHotel.innerHTML = cambioValor(hotel.price)
 
         const buttonCard = document.createElement("button")
@@ -287,113 +278,60 @@ function showCard(data) {
 
         pSection.style.display = "none"
 
+        message.style.display = "none"
+        
     });
 }
 
-const hoteles = await hotelesCard()
+
+
 
 showCard(hoteles)
 
+selectCountry.addEventListener("change", filterAndShowCards);
+selectSize.addEventListener("change", filterAndShowCards);
+selectPrice.addEventListener("change", filterAndShowCards);
 
-// articleSectionMain.appendChild(hotelesCard())
+buttonClear.addEventListener("click", clearFilters);
 
-// hotelesCard()
+function clearFilters() {
+    selectCountry.value = "all";
+    selectSize.value = "all";
+    selectPrice.value = "all";
 
-import { hotelesCards } from "./api.js";
-
-// buttonConsulta.addEventListener("click" , async () => {
-//     const response = await hotelesCards()
-//     const data = await response.json()
-//     sectionMain.innerHTML = ""
-
+    showCard(hoteles)
+}
 
 
+
+
+function filterAndShowCards() {
+    const selectedCountry = selectCountry.value;
+    const selectedSize = selectSize.value;
+    const selectedPrice = selectPrice.value;
+
+    const filteredHotels = hoteles.filter((hotel) => {
+        const countryMatch = selectedCountry === "all" || hotel.country === selectedCountry;
+        const sizeMatch = selectedSize === "all" || changeSize(hotel.rooms) == selectedSize;
+        const priceMatch = selectedPrice === "all" || hotel.price == selectedPrice;
+
+        return countryMatch && sizeMatch && priceMatch;
     
-    // data.forEach((hotel) => {
-    //     const cardHotel = document.createElement("article")
-    //     sectionMain.appendChild(cardHotel)
-    //     cardHotel.setAttribute("class", "card")
+    });
+    showCard(filteredHotels);
 
-    //     const imagenHotel = document.createElement("img")
-    //     cardHotel.appendChild(imagenHotel)
-    //     imagenHotel.setAttribute("src", hotel.photo)
-    //     imagenHotel.setAttribute("alt", hotel.name)
-    //     imagenHotel.setAttribute("class", "hotel-image")
-        
-    //     const nombreHotel = document.createElement("h2")
-    //     cardHotel.appendChild(nombreHotel)
-    //     nombreHotel.innerText = hotel.name
-    //     nombreHotel.setAttribute("class", "hotel-name")
-
-    //     const cardInfo = document.createElement("section")
-    //     cardHotel.appendChild(cardInfo)
-    //     cardInfo.setAttribute("class", "card-info")
-
-    //     const divCountry = document.createElement("div")
-    //     cardInfo.appendChild(divCountry)
-    //     divCountry.setAttribute("class", "div-card-country")
-
-    //     const imgCountry = document.createElement("img")
-    //     divCountry.appendChild(imgCountry)
-    //     function logoCountry (country) {
-    //         switch (country) {
-    //             case "Argentina":
-    //                 return './assets/argentina.png';
-    //             case "Brasil":
-    //                 return './assets/brasil.png';
-    //             case "Chile":
-    //                 return './assets/chile.png';
-    //             case "Uruguay":
-    //                 return './assets/uruguay.png';
-    //             default:
-    //                 return 'Pais no valido';
-    //             }
-    //     }
-    //     imgCountry.src = logoCountry(hotel.country)
-    //     iconCountry.setAttribute("class", "img-country")
-
-    //     const countryCard = document.createElement("p")
-    //     divCountry.appendChild(countryCard)
-    //     countryCard.setAttribute("class", "country-name")
-    //     countryCard.innerHTML = hotel.country
+    const messageFilter = document.getElementsByClassName("noResults");
+    if (filteredHotels.length == 0) {
+        messageFilter.style.display = "block";
+    } else {
+        messageFilter.style.display = "none";
+    }
+}
 
 
 
-    //     const divHotel = document.createElement("div")
-    //     cardInfo.appendChild(divHotel)
-    //     divHotel.setAttribute("class", "div-card-room")
 
-        
-    //     const sizeHotel = document.createElement("p")
-    //     divHotel.appendChild(sizeHotel)
-    //     sizeHotel.setAttribute("class", "hotel-size")
-    //     sizeHotel.innerHTML = hotel.rooms +" rooms -"
 
-    //     const priceHotel = document.createElement("p")
-    //     divHotel.appendChild(priceHotel)
-    //     priceHotel.setAttribute("class", "hotel-price")
-    //     function cambioValor (price) {
-    //         switch (price) {
-    //             case 1:
-    //                 return '$';
-    //             case 2:
-    //                 return '$$';
-    //             case 3:
-    //                 return '$$$';
-    //             case 4:
-    //                 return '$$$$';
-    //             default:
-    //                 return 'Número no válido';
-    //             }
-    //     }
-    //     priceHotel.innerHTML = cambioValor(hotel.price)
-
-    //     const buttonCard = document.createElement("button")
-    //     cardInfo.appendChild(buttonCard)
-    //     buttonCard.setAttribute("class", "button-card")
-    //     buttonCard.innerText = "Book it!"
-
-    // });
 
 
 

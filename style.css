@@ -9,7 +9,10 @@ body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    background-image: url(./assets/Rectangle\ 10.png);
+    background-image: linear-gradient(
+        rgba(0,0,0,0.1),
+        rgba(0,0,0,0.7)
+    ), url(./assets/Rectangle\ 10.png);
     
 }
 
@@ -31,14 +34,19 @@ body {
     padding: 0;
     margin: 0;
     width: 100%;
-    display: flex;
+    display: inline-flex;
     justify-content: space-around;
+    position: relative;
+}
+
+.icon-select-country {
+    position: absolute;
+    top: 20%;
+    left: 4%;
 }
 
 .Filter__countries {
     padding: 0px 0px 0px 20px;
-    background: url(/assets/1.png);
-    background: no-repeat;
 
 }
 
@@ -46,16 +54,44 @@ body {
     background-color: rgba(255, 255, 255, 0.75);
 }
 
+.icon-select-datein{
+    position: absolute;
+    top: 20%;
+    left: 22%;
+}
+
 .Filter__DateFrom {
     padding: 0px 0px 0px 24px;
 }
 
+.icon-select-dateout{
+    position: absolute;
+    top: 20%;
+    left: 40.3%;
+}
+
 .Filter__DateTo {
     padding: 0px 0px 0px 24px;
+
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.icon-select-price{
+    position: absolute;
+    top: 20%;
+    left: 58%;
 }
 
 .Filter__Prices {
     padding: 0px 0px 0px 20px
+}
+
+.icon-select-size {
+    position: absolute;
+    top: 20%;
+    left: 74%;
 }
 
 .Filter__Sizes {
@@ -123,7 +159,7 @@ body {
 
 .card-info {
     display: flex;
-    /* flex-direction: column; */
+    flex-direction: column;
 }
 .hotel-image {
     position: absolute;
@@ -132,7 +168,7 @@ body {
     top: 0;
     left: 0;
     z-index:-2;
-    opacity: 0.89;
+    filter: brightness(55%);
 }
 
 .hotel-name {
@@ -166,6 +202,9 @@ body {
 } */
 
 .button-card {
+    position: absolute;
+    left: 75%;
+    top: 80%;
     align-self: center;
     border: 2px solid white;
     border-radius: 0.5rem;

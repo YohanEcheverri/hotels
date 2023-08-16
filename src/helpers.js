@@ -37,3 +37,10 @@ export function logoCountry(country) {
       return "Pais no valido";
   }
 }
+
+export function putCeroDate(fecha) {
+  const toString = "" + fecha
+  if(toString.length === 1) {
+    return "0" + fecha
+  } 
+}

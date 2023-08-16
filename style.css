@@ -68,14 +68,14 @@ body {
 .Filter__DateTo {
   padding: 0px 0px 0px 24px;
 }
-input[type="date"]::-webkit-calendar-picker-indicator {
+/* input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
-}
+} */
 
 .icon-select-price {
   position: absolute;
   top: 20%;
-  left: 58%;
+  left: 59%;
 }
 
 .Filter__Prices {
@@ -85,7 +85,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .icon-select-size {
   position: absolute;
   top: 20%;
-  left: 74%;
+  left: 74.6%;
 }
 
 .Filter__Sizes {
@@ -125,6 +125,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: white;
 }
 
+.noResults {
+  font-family: "Roboto", sans-serif;
+  font-size: 25px;
+}
 .Main {
   padding: 0px 24px;
 }

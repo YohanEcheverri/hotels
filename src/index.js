@@ -1,5 +1,5 @@
 import { hotelesCards } from "./api.js";
-import { cambioValor, changeSize, logoCountry } from "./helpers.js";
+import { cambioValor, changeSize, logoCountry, putCeroDate } from "./helpers.js";
 
 const hoteles = await hotelesCards();
 
@@ -43,6 +43,17 @@ const sectionDivGeneral = document.createElement("section");
 const sectionMain = document.createElement("section");
 const body = document.querySelector("body");
 const message = document.createElement("p");
+
+
+const today = new Date() 
+const day = today.getDate()
+const month = putCeroDate(today.getMonth() + 1)
+const year = today.getFullYear()
+
+const dateCheckIn = year + "-" + month + "-" + day
+const dateCheckOut = year + "-" + month + "-" + day
+
+
 
 body.appendChild(divGeneral);
 divGeneral.setAttribute("id", "app");
@@ -97,7 +108,7 @@ divDiv1Header.appendChild(inputCheckin);
 inputCheckin.className = "Filter__DateFrom Filter-Icon";
 inputCheckin.setAttribute("name", "date-from");
 inputCheckin.setAttribute("id", "date-from");
-inputCheckin.setAttribute("min", "");
+inputCheckin.setAttribute("min", dateCheckIn);
 inputCheckin.setAttribute("max", "");
 inputCheckin.setAttribute("type", "date");
 inputCheckin.setAttribute("value", "");
@@ -111,7 +122,8 @@ inputCheckout.setAttribute("class", "Filter__DateTo Filter-Icon");
 inputCheckout.setAttribute("name", "date-to");
 inputCheckout.setAttribute("id", "date-to");
 inputCheckout.setAttribute("type", "date");
-inputCheckout.setAttribute("min", "");
+inputCheckout.setAttribute("min", dateCheckOut);
+inputCheckout.setAttribute("max", "");
 inputCheckout.setAttribute("value", "");
 
 divDiv1Header.appendChild(iconSelectPrice);
@@ -199,15 +211,12 @@ sectionMain.setAttribute("class", "HotelsContainer");
 
 sectionDivGeneral.appendChild(message);
 message.setAttribute("class", "noResults");
-message.innerText = "No se encontraron resultados";
+message.innerText = "Lo siento, no se encontraron resultados...";
 
-// const checkInInput = document.getElementById("date-from")
 
-// const today = new Date()
 
 function showCard(data) {
   sectionMain.innerHTML = "";
-
   data.forEach((hotel) => {
     const cardHotel = document.createElement("article");
     sectionMain.appendChild(cardHotel);
@@ -261,18 +270,21 @@ function showCard(data) {
     cardInfo.appendChild(buttonCard);
     buttonCard.setAttribute("class", "button-card");
     buttonCard.innerText = "Book it!";
-
+    
     pSection.style.display = "none";
 
     message.style.display = "none";
   });
 }
 
+
 showCard(hoteles);
 
 selectCountry.addEventListener("change", filterAndShowCards);
 selectSize.addEventListener("change", filterAndShowCards);
 selectPrice.addEventListener("change", filterAndShowCards);
+inputCheckin.addEventListener("change", filterAndShowCards )
+inputCheckout.addEventListener("change", filterAndShowCards )
 
 buttonClear.addEventListener("click", clearFilters);
 
@@ -280,6 +292,8 @@ function clearFilters() {
   selectCountry.value = "all";
   selectSize.value = "all";
   selectPrice.value = "all";
+  inputCheckin.value = "";
+  inputCheckout.value = "";
 
   showCard(hoteles);
 }
@@ -288,22 +302,38 @@ function filterAndShowCards() {
   const selectedCountry = selectCountry.value;
   const selectedSize = selectSize.value;
   const selectedPrice = selectPrice.value;
+  const selectedCheckin = inputCheckin.value;
+  const selectedCheckout = inputCheckout.value;
 
+  
   const filteredHotels = hoteles.filter((hotel) => {
-    const countryMatch =
-      selectedCountry === "all" || hotel.country === selectedCountry;
-    const sizeMatch =
-      selectedSize === "all" || changeSize(hotel.rooms) == selectedSize;
+    const countryMatch = selectedCountry === "all" || hotel.country === selectedCountry;
+    const sizeMatch = selectedSize === "all" || changeSize(hotel.rooms) == selectedSize;
     const priceMatch = selectedPrice === "all" || hotel.price == selectedPrice;
+    const dayAviabilityHotel = hotel.availabilityTo - hotel.availabilityFrom 
 
-    return countryMatch && sizeMatch && priceMatch;
+    const dayFrom = new Date(selectedCheckin)
+    const formatDayFrom = new Date(
+      dayFrom.getTime() + dayFrom.getTimezoneOffset() * 60000
+    );
+    const DayTo = new Date(selectedCheckout).getTime()
+    const dayAviability = DayTo - dayFrom
+    const inicialDay = today.setHours(0,0,0,0) + hotel.availabilityFrom
+    
+    const checkinMatch = selectedCheckin === "" || formatDayFrom.getTime() >= inicialDay;
+    const checkoutMatch = selectedCheckout === "" || dayAviabilityHotel <= dayAviability;
+    console.log(formatDayFrom.getTime(), inicialDay)
+
+    return countryMatch && sizeMatch && priceMatch && checkinMatch && checkoutMatch;
   });
   showCard(filteredHotels);
 
-  const messageFilter = document.getElementsByClassName("noResults");
+
+  // const messageFilter = document.getElementsByClassName("noResults");
   if (filteredHotels.length == 0) {
-    messageFilter.style.display = "block";
+    message.style.display = "block";
+
   } else {
-    messageFilter.style.display = "none";
+    message.style.display = "none";
   }
 }
